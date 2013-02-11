@@ -17,8 +17,9 @@ $mappyPlugin = new mappyPlugin;
 	
 function trip_viz_enqueue_script() {
 	wp_enqueue_script( 'gmaps', 'http://maps.google.com/maps/api/js?sensor=false', false );
-	wp_enqueue_Script('geocode', 'http://google-maps-utility-library-v3.googlecode.com/svn/tags/infobox/1.1.9/src/infobox.js', false );
-	wp_enqueue_Script('draw', plugins_url('/js/map.js',__FILE__), 'jquery');
+	wp_enqueue_script('geocode', 'http://google-maps-utility-library-v3.googlecode.com/svn/tags/infobox/1.1.9/src/infobox.js', false );
+	wp_enqueue_script('jquery');
+	wp_enqueue_script('draw', plugins_url('/js/map.js',__FILE__), 'jquery');
 }
 
 add_action('init',$mappyPlugin->register());
@@ -62,16 +63,19 @@ class mappyPlugin {
 				    'update_item'         => __( 'Update Country' ),
 				    'add_new_item'        => __( 'Add New Country' ),
 				    'new_item_name'       => __( 'New Country Name' ),
-				    'menu_name'           => __( 'Country' )
+				    'menu_name'           => __( 'Country' ),
 				  ); 	
 				
 				  $args = array(
-				    'hierarchical'        => false,
 				    'labels'              => $labels,
+				    'public'			  => true,
+				    'show_in_nav_menus'	  => true,
 				    'show_ui'             => true,
-				    'show_admin_column'   => true,
-				    'query_var'           => true,
-				    'rewrite'             => array( 'slug' => 'country' )
+				    'show_tagcloud'		  => true,
+				    'hierarchical'        => false,
+				    'rewrite'             => array( 'slug' => 'country' ),
+				    'query_var'           => 'country'
+/* 				    'show_admin_column'   => true, */
 				  );
 				
 				  register_taxonomy( 'country', array( 'post' ), $args );
@@ -97,6 +101,7 @@ class mappyPlugin {
 				  ); 
 				
 				  $args = array(
+				    'public'			  => true,
 				    'hierarchical'            => false,
 				    'labels'                  => $labels,
 				    'show_ui'                 => true,
@@ -128,6 +133,7 @@ class mappyPlugin {
 				  ); 
 				
 				  $args = array(
+				    'public'			  => true,
 				    'hierarchical'            => false,
 				    'labels'                  => $labels,
 				    'show_ui'                 => true,
@@ -171,9 +177,9 @@ function map_shortcode($content) {
     //var_dump( $mapData);
     //var_dump($taxonomies);
     echo $mapBody;
-    
 
 }
+
 add_shortcode('map', 'map_shortcode');
 
 // hook $mappyPlugin -> populateList() into plugin activation activation
